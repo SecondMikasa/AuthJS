@@ -1,5 +1,4 @@
-import mongoose, { Schema } from "mongoose";
-import { emit } from "process";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -30,4 +29,4 @@ const userSchema = new mongoose.Schema({
     verifyTokenExpiry: Date
 })
 
-const User = mongoose.models.users || mongoose.model("users", userSchema)
+export const User = mongoose.models.users || mongoose.model("users", userSchema)
