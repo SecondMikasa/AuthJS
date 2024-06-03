@@ -17,8 +17,11 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         else if (emailType === 'RESET') {
             await User.findByIdAndUpdate(userId,
                 {
-                    forgotPasswordToken: hashedToken,
-                    forgotPasswordTokenExpiry: Date.now() + 3600000
+                    $set: {
+                        forgotPasswordToken: hashedToken,
+                        forgotPasswordTokenExpiry: Date.now() + 3600000
+                        //Expiry from 1 hour from now
+                    }
                 })
         }
 
@@ -26,22 +29,22 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
-              user: "d9f6d2a7856544", // ❌ should be in .env
-              pass: "b80eb0a66cd798" // ❌ should be in .env
+                user: "d9f6d2a7856544", // ❌ should be in .env
+                pass: "b80eb0a66cd798" // ❌ should be in .env
             }
-          });
+        });
 
         const mailOptions = {
             from: 'kumararnim1@vivaldi.net',
             to: email,
             subject: emailType === 'VERIFY' ? "Verify Your Email" : "Reset Your Password",
-            html: emailType === 'VERIFY' ? 
-            `<p>
+            html: emailType === 'VERIFY' ?
+                `<p>
             Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}"> here </a> to verify your email or paste the following link below in your browser
             <br/>
             "${process.env.DOMAIN}/verifyemail?token=${hashedToken}" 
             </p>` :
-            `<p>
+                `<p>
             Click <a href="${process.env.DOMAIN}/resetpassword?token=${hashedToken}"> here </a> to reset your password
             or paste the link below in your browser
             <br/>
