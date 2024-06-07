@@ -1,12 +1,29 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-// This function can be marked 'async' if using 'await' inside
+// Redirect user to the specified URL under specified conditions
 export function middleware(request: NextRequest) {
-    return NextResponse.redirect(new URL('/home', request.url))
+    const path = request.nextUrl.pathname
+
+    const isPublicPath = path === '/login' || path === '/signup' || path === '/verifyemail'
+    // isPublicPath is true if any path is accessed
+
+    const token = request.cookies.get("token")?.value || ''
+
+    if (isPublicPath && token) {
+        return NextResponse.redirect(new URL('/', request.url))
+    }
+    else if(!isPublicPath && !token) {
+        return NextResponse.redirect(new URL('/login', request.url))
+    }
 }
 
-// See "Matching Paths" below to learn more 
+// Set paths for which middleware would be executed through matcher
 export const config = {
-    matcher: '/about/:path*'
+    matcher: [
+        '/',
+        '/signup',
+        '/login',
+        '/profile',
+        '/verifyemail'
+    ]
 }

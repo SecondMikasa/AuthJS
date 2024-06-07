@@ -64,7 +64,7 @@ function LoginPage() {
       >
         {buttonDisabled ? "ⓧ" : "Login" }
       </button>
-      Doesn't have an account? <Link href="/login" className='underline font-extrabold'> Signup here </Link> 
+      Doesn't have an account? <Link href="/signup" className='underline font-extrabold'> Signup here </Link> 
     </div>
   )
 }
